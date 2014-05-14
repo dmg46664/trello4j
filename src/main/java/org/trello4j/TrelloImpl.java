@@ -1148,34 +1148,51 @@ public class TrelloImpl implements Trello {
 	 */
 	private InputStream doRequest(String url, String requestMethod, Map<String, String> map) {
 		try {
-			HttpsURLConnection conn = (HttpsURLConnection) new URL(url)
-					.openConnection();
-			conn.setRequestProperty("Accept-Encoding", "gzip, deflate");
-            conn.setDoOutput(requestMethod.equals(METHOD_POST) || requestMethod.equals(METHOD_PUT));
-            conn.setRequestMethod(requestMethod);
+			HttpsURLConnection conn = null ;
+			int responseCode = -1;
 
-            if(map != null && !map.isEmpty()) {
-                StringBuilder sb = new StringBuilder();
-                for (String key : map.keySet()) {
-                    sb.append(sb.length() > 0 ? "&" : "")
-                        .append(key)
-                        .append("=")
-                        .append(URLEncoder.encode(map.get(key), "UTF-8"));
-                }
-                conn.getOutputStream().write(sb.toString().getBytes());
-                conn.getOutputStream().close();
-            }
+//			int attemptsLeft = 2 ;
+//			while(attemptsLeft > 0 && responseCode == -1)
+//			{
+				conn = (HttpsURLConnection) new URL(url)
+						.openConnection();
+				conn.setRequestProperty("Accept-Encoding", "gzip, deflate");
+	            conn.setDoOutput(requestMethod.equals(METHOD_POST) || requestMethod.equals(METHOD_PUT));
+	            conn.setRequestMethod(requestMethod);
 
-			if (conn.getResponseCode() > 399) {
-				return null;
-			} else {
-				return getWrappedInputStream(
-                    conn.getInputStream(), GZIP_ENCODING.equalsIgnoreCase(conn.getContentEncoding())
-                );
-			}
+	            if(map != null && !map.isEmpty()) {
+		            StringBuilder sb = new StringBuilder();
+	                for (String key : map.keySet()) {
+	                    sb.append(sb.length() > 0 ? "&" : "")
+	                        .append(key)
+	                        .append("=")
+	                        .append(URLEncoder.encode(map.get(key), "UTF-8"));
+	                }
+	                conn.getOutputStream().write(sb.toString().getBytes());
+	                conn.getOutputStream().close();
+	            }
+
+//				try {
+					responseCode = conn.getResponseCode();//so we can step debug
+					if ((responseCode < 0 || responseCode > 399) ){//&& attemptsLeft == 0) {
+						if (conn.getResponseMessage().contains("Unauthorized"))
+							throw new TrelloUnauthorizedException("Trello token expired or insufficient permission");
+						throw new TrelloException("Trello exception on TrelloImpl.doRequest code:" + responseCode);
+					}
+					else {
+						return getWrappedInputStream(
+								conn.getInputStream(), GZIP_ENCODING.equalsIgnoreCase(conn.getContentEncoding())
+						);
+					}
+//				} catch (IOException ex) {
+//					if (attemptsLeft == 0)
+//						throw ex ;
+//				}
+//			}
 		} catch (IOException e) {
 			throw new TrelloException(e.getMessage());
 		}
+//		return null ;
 	}
 
 	private void validateObjectId(String id) {
