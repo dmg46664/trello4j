@@ -1,5 +1,6 @@
 package org.trello4j;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -42,4 +43,8 @@ public interface CardService {
 	 * @param keyValeMap Map of the optional key-value-pairs.
 	 */
 	Card createCard(String idList, String name, Map<String, String> keyValeMap);
+
+	void addMemberToCard(String cardId, String memberId,  String trelloToken);
+
+	InputStream doTrelloRequest(String url, String httpMethod, Map<String, String> map);
 }

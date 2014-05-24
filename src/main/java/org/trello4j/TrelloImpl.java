@@ -493,6 +493,30 @@ public class TrelloImpl implements Trello {
 		}, doPost(url, keyValueMap));
 	}
 
+	@Override
+	public void addMemberToCard(String cardId, String memberId, String trelloToken) {
+//		String url = "https://api.trello.com/1/cards/" + cardId +"/idMembers?" +
+//				"value=" + memberId +
+//				"&key=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" +
+//				"&token=" + trelloToken;
+//
+//		doRequest(url, "PUT");
+
+		//TODO The following didn't work last time I checked, the above did but is just for reference.
+		final String url = TrelloURL.create(apiKey, TrelloURL.PUT_CARD_MEMBER_URL, cardId)
+				.token(token).build();
+		HashMap<String, String> keyValueMap = new HashMap<String, String>();
+		keyValueMap.put("value", memberId);
+		trelloObjFactory.createObject(new TypeToken<List<Member>>() {
+		}, doPut(url, keyValueMap));
+
+	}
+
+	@Override
+	public InputStream doTrelloRequest(String url, String httpMethod, Map<String, String> map) {
+		return doRequest(url, httpMethod, map);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -1128,6 +1152,10 @@ public class TrelloImpl implements Trello {
 		return doRequest(url, METHOD_PUT);
 	}
 
+	private InputStream doPut(String url, Map<String, String> map) {
+		return doRequest(url, METHOD_PUT, map);
+	}
+
 	private InputStream doPost(String url, Map<String, String> map) {
 		return doRequest(url, METHOD_POST, map);
 	}
@@ -1176,8 +1204,8 @@ public class TrelloImpl implements Trello {
 					responseCode = conn.getResponseCode();//so we can step debug
 					if ((responseCode < 0 || responseCode > 399) ){//&& attemptsLeft == 0) {
 						if (conn.getResponseMessage().contains("Unauthorized"))
-							throw new TrelloUnauthorizedException("Trello token expired or insufficient permission");
-						throw new TrelloException("Trello exception on TrelloImpl.doRequest code:" + responseCode);
+							throw new TrelloUnauthorizedException("Trello token expired or insufficient permission. response code:" + responseCode + " message: " + conn.getResponseMessage());
+						throw new TrelloException("Trello exception on TrelloImpl.doRequest code:" + responseCode + " message: " + conn.getResponseMessage());
 					}
 					else {
 						return getWrappedInputStream(

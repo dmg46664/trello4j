@@ -40,6 +40,7 @@ public class TrelloURL {
 	public static final String CARD_CHECKLISTS_URL = "https://api.trello.com/1/cards/{0}/checklists";
 	public static final String CARD_LIST_URL = "https://api.trello.com/1/cards/{0}/list";
 	public static final String CARD_MEMBERS_URL = "https://api.trello.com/1/cards/{0}/members";
+	public static final String PUT_CARD_MEMBER_URL = "https://api.trello.com/1/cards/{0}/idMembers";
 	public static final String CARD_POST_URL = "https://api.trello.com/1/cards";
 	public static final String LIST_ACTIONS_URL = "https://api.trello.com/1/lists/{0}/action";
 	public static final String LIST_BOARD_URL = "https://api.trello.com/1/lists/{0}/board";
@@ -137,9 +138,9 @@ public class TrelloURL {
 
 	private String createUrlWithPathParams() {
 		if (pathParams == null || pathParams.length == 0) return url;
-		String compiledUrl = null;
+		String compiledUrl = url;
 		for (int i = 0; i < pathParams.length; i++) {
-			compiledUrl = url.replaceAll(PATH_PARAM_ARG_PREFIX + i
+			compiledUrl = compiledUrl.replaceAll(PATH_PARAM_ARG_PREFIX + i
 					+ PATH_PARAM_ARG_SUFFIX, pathParams[i]);
 		}
 		// boardUrl += authQueryString;
