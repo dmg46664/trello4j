@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 public class Board extends TrelloObject {
 
+
+
 	public enum PERMISSION_TYPE {
 		PUBLIC, 
 		ORGANIZATION,
@@ -75,6 +77,10 @@ public class Board extends TrelloObject {
 
 	public void setInvited(boolean invited) {
 		this.invited = invited;
+	}
+
+	public java.util.List<List> getLists() {
+		return lists;
 	}
 
 	public class Prefs {
