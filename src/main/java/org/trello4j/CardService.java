@@ -44,7 +44,7 @@ public interface CardService {
 	 */
 	Card createCard(String idList, String name, Map<String, String> keyValeMap);
 
-	void addMemberToCard(String cardId, String memberId,  String trelloToken);
+	void addMemberToCard(String cardId, String trelloKey, String memberId,  String trelloToken);
 
 	InputStream doTrelloRequest(String url, String httpMethod, Map<String, String> map);
 }
