@@ -1,6 +1,8 @@
 package org.trello4j.model;
 
 
+import java.util.ArrayList;
+
 public class Board extends TrelloObject {
 
 	public enum PERMISSION_TYPE {
@@ -16,6 +18,7 @@ public class Board extends TrelloObject {
 	private String idOrganization;
 	private String url;
 	private Prefs prefs;
+	private java.util.List<List> lists ;
 
 	
 	public String getName() {

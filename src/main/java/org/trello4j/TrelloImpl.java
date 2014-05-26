@@ -280,7 +280,9 @@ public class TrelloImpl implements Trello {
 				.create(apiKey, TrelloURL.MEMBER_BOARDS_URL, usernameOrId)
 				.token(token)
 				.filter(filter)
-				.build();
+				.build()+"&lists=all";
+
+
 		return trelloObjFactory.createObject(new TypeToken<List<Board>>() {
 		}, doGet(url));
 	}
@@ -318,9 +320,9 @@ public class TrelloImpl implements Trello {
 	public List<Action> getActionsByOrganization(String organizationNameOrId) {
 		final String url = TrelloURL
 				.create(
-                        apiKey,
-                        TrelloURL.ORGANIZATION_ACTIONS_URL,
-                        organizationNameOrId)
+						apiKey,
+						TrelloURL.ORGANIZATION_ACTIONS_URL,
+						organizationNameOrId)
 				.token(token)
 				.build();
 		return trelloObjFactory.createObject(new TypeToken<List<Action>>() {
@@ -969,6 +971,8 @@ public class TrelloImpl implements Trello {
 				.token(token)
 				.filter(filter)
 				.build();
+		
+
 
 		return trelloObjFactory.createObject(new TypeToken<List<Card>>() {
 		}, doGet(url));
