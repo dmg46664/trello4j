@@ -22,6 +22,7 @@ public class TrelloUnauthorizedException extends RuntimeException {
 	 */
 	public TrelloUnauthorizedException(String msg) {
 		super(msg);
+		System.out.println("TrelloUnauthorizedException error message: " + this.getMessage());
 	}
 
 }

@@ -61,12 +61,21 @@ public class Checklist extends TrelloObject {
 		this.checkItems = checkItems;
 	}
 
-	public class CheckItem extends TrelloObject {
+	public static class CheckItem extends TrelloObject {
 
 		private String name;
         private String type;
         private double pos;
+		private String state;
 
+		public CheckItem()
+		{
+			name = ""; type = ""; pos = 0d; state = "incomplete";
+		}
+
+		public String getState() {return state;	}
+
+		public void setState(String state) {this.state = state;	}
 
         public String getName() {
 			return name;

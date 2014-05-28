@@ -10,6 +10,7 @@ import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -282,7 +283,6 @@ public class TrelloImpl implements Trello {
 				.filter(filter)
 				.build()+"&lists=all";
 
-
 		return trelloObjFactory.createObject(new TypeToken<List<Board>>() {
 		}, doGet(url));
 	}
@@ -341,7 +341,8 @@ public class TrelloImpl implements Trello {
 		final String url = TrelloURL
 				.create(apiKey, TrelloURL.CARD_URL, cardId)
 				.token(token)
-				.build();
+				.build()
+				+ "&idChecklists=all";
 
 		return trelloObjFactory.createObject(new TypeToken<Card>() {
 		}, doGet(url));
@@ -493,6 +494,30 @@ public class TrelloImpl implements Trello {
 
 		return trelloObjFactory.createObject(new TypeToken<Card>() {
 		}, doPost(url, keyValueMap));
+	}
+
+	@Override
+	public void overwriteCardDesc(String cardId, String desc)
+	{
+		try {
+			String encodedString = URLEncoder.encode(desc, "UTF-8");
+			String url = "https://api.trello.com/1/cards/" + cardId +"/desc?" + "value=" + encodedString + "&key=" + apiKey + "&token=" + token;
+			doRequest(url, "PUT");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void overwriteCardName(String cardId, String name)
+	{
+		try {
+			String encodedString = URLEncoder.encode(name, "UTF-8");
+			String url = "https://api.trello.com/1/cards/" + cardId +"/name?" + "value=" + encodedString + "&key=" + apiKey + "&token=" + token;
+			doRequest(url, "PUT");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -963,14 +988,15 @@ public class TrelloImpl implements Trello {
 	 * @see org.trello4j.MemberService#getCardsByMember(java.lang.String)
 	 */
 	@Override
-	public List<Card> getCardsByMember(String usernameOrId,
+	public List<Card>
+	getCardsByMember(String usernameOrId,
 			final String... filter) {
 
 		final String url = TrelloURL
 				.create(apiKey, TrelloURL.MEMBER_CARDS_URL, usernameOrId)
 				.token(token)
 				.filter(filter)
-				.build();
+				.build()+"&checklists=all";
 		
 
 

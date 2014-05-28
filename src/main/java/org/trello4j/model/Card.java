@@ -20,6 +20,7 @@ public class Card extends TrelloObject {
 	private List<Label> labels;
 	private String url;
 	private double pos;
+	private List<Checklist> checklists;
 
     public String getName() {
 		return name;
@@ -71,6 +72,10 @@ public class Card extends TrelloObject {
 
 	public List<String> getIdMembers() {
 		return idMembers;
+	}
+
+	public List<Checklist> getCheckLists(){
+		return checklists;
 	}
 
 	public void setIdMembers(List<String> idMembers) {

@@ -42,6 +42,7 @@ public class TrelloURL {
 	public static final String CARD_MEMBERS_URL = "https://api.trello.com/1/cards/{0}/members";
 	public static final String PUT_CARD_MEMBER_URL = "https://api.trello.com/1/cards/{0}/idMembers";
 	public static final String CARD_POST_URL = "https://api.trello.com/1/cards";
+	public static final String CARD_PUT_URL = "https://api.trello.com/1/cards/{0}";
 	public static final String LIST_ACTIONS_URL = "https://api.trello.com/1/lists/{0}/action";
 	public static final String LIST_BOARD_URL = "https://api.trello.com/1/lists/{0}/board";
 	public static final String LIST_CARDS_URL = "https://api.trello.com/1/lists/{0}/cards";
