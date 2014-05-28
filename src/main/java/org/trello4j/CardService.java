@@ -51,4 +51,10 @@ public interface CardService {
 	void addMemberToCard(String cardId, String trelloKey, String memberId,  String trelloToken);
 
 	InputStream doTrelloRequest(String url, String httpMethod, Map<String, String> map);
+
+	void overwriteCardCheckItemName(String cardId, String itemName, String checkListId, String checkItemId);
+
+	void createNewCheckItem(String itemName, String checkListId);
+
+	void overwriteCardCheckItemState(String cardId, String itemState, String checkListId, String checkItemId);
 }

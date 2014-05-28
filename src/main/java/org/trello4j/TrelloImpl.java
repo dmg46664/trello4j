@@ -521,6 +521,57 @@ public class TrelloImpl implements Trello {
 	}
 
 	@Override
+	public void overwriteCardCheckItemName(String cardId, String itemName, String checkListId, String checkItemId)
+	{
+		try {
+			String encodedString = URLEncoder.encode(itemName, "UTF-8");
+			String url = "https://api.trello.com/1/cards/" + cardId +
+					"/checklist/" + checkListId +
+					"/checkItem/" + checkItemId +
+					"/name?value=" + encodedString +
+					"&key=" + apiKey +
+					"&token=" + token;
+			doRequest(url, "PUT");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void createNewCheckItem(String itemName, String checkListId)
+	{
+		final String url = TrelloURL
+				.create(apiKey, TrelloURL.CHECKLIST_CHECKITEMS_URL, checkListId)
+				.token(token)
+				.build();
+
+		Map<String, String> keyValueMap = new HashMap<String, String>();
+		keyValueMap.put("name", itemName);
+		doPost(url, keyValueMap);
+	}
+
+	@Override
+	public void overwriteCardCheckItemState(String cardId, String itemState, String checkListId, String checkItemId) {
+		try {
+			if(itemState.contains("complete") || itemState.contains("incomplete"))
+			{
+				String encodedString = URLEncoder.encode(itemState, "UTF-8");
+				String url = "https://api.trello.com/1/cards/" + cardId +
+						"/checklist/" + checkListId +
+						"/checkItem/" + checkItemId +
+						"/state?value=" + encodedString +
+						"&key=" + apiKey +
+						"&token=" + token;
+				doRequest(url, "PUT");
+			}
+			else
+				throw new RuntimeException("itemState did not contain 'complete' or 'incomplete'. Arg passed in was: " + itemState);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
 	public void addMemberToCard(String cardId, String trelloKey, String memberId, String trelloToken) {
 		String url = "https://api.trello.com/1/cards/" + cardId +"/idMembers?" +
 				"value=" + memberId +
