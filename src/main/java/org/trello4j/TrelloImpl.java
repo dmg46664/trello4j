@@ -538,16 +538,50 @@ public class TrelloImpl implements Trello {
 	}
 
 	@Override
-	public void createNewCheckItem(String itemName, String checkListId)
+	public void createNewCheckList(String cardId, String checkListTitle)
 	{
 		final String url = TrelloURL
-				.create(apiKey, TrelloURL.CHECKLIST_CHECKITEMS_URL, checkListId)
+				.create(apiKey, TrelloURL.CHECKLIST_URL, "")
 				.token(token)
 				.build();
 
 		Map<String, String> keyValueMap = new HashMap<String, String>();
-		keyValueMap.put("name", itemName);
+		keyValueMap.put("name", checkListTitle);
+		keyValueMap.put("idCard", cardId);
 		doPost(url, keyValueMap);
+	}
+
+	@Override
+	public void changeListOfCard(String cardId, String listId) {
+		validateObjectId(listId);
+
+		String url = "https://api.trello.com/1/cards/" + cardId +"/idList?" +
+				"value=" + listId +
+				"&key=" + apiKey +
+				"&token=" + token;
+
+		doRequest(url, "PUT");
+
+		//TODO: this should use the doPut method instead
+	}
+
+	@Override
+	public void createNewCheckItem(String itemName, String itemState, String checkListId)
+	{
+		if(itemState.contains("complete") || itemState.contains("incomplete"))
+		{
+			final String url = TrelloURL
+					.create(apiKey, TrelloURL.CHECKLIST_CHECKITEMS_URL, checkListId)
+					.token(token)
+					.build();
+
+			Map<String, String> keyValueMap = new HashMap<String, String>();
+			keyValueMap.put("name", itemName);
+			keyValueMap.put("checked", itemState);
+			doPost(url, keyValueMap);
+		}
+		else
+			throw new RuntimeException("itemState did not contain 'complete' or 'incomplete'. Arg passed in was: " + itemState);
 	}
 
 	@Override
