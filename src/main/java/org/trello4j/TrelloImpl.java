@@ -580,22 +580,17 @@ public class TrelloImpl implements Trello {
 	}
 
 	@Override
-	public void createNewCheckItem(String itemName, String itemState, String checkListId)
+	public void createNewCheckItem(String itemName, boolean itemState, String checkListId)
 	{
-		if(itemState.contains("complete") || itemState.contains("incomplete"))
-		{
-			final String url = TrelloURL
-					.create(apiKey, TrelloURL.CHECKLIST_CHECKITEMS_URL, checkListId)
-					.token(token)
-					.build();
+		final String url = TrelloURL
+				.create(apiKey, TrelloURL.CHECKLIST_CHECKITEMS_URL, checkListId)
+				.token(token)
+				.build();
 
-			Map<String, String> keyValueMap = new HashMap<String, String>();
-			keyValueMap.put("name", itemName);
-			keyValueMap.put("checked", itemState);
-			doPost(url, keyValueMap);
-		}
-		else
-			throw new RuntimeException("itemState did not contain 'complete' or 'incomplete'. Arg passed in was: " + itemState);
+		Map<String, String> keyValueMap = new HashMap<String, String>();
+		keyValueMap.put("name", itemName);
+		keyValueMap.put("checked", Boolean.toString(itemState));
+		doPost(url, keyValueMap);
 	}
 
 	@Override

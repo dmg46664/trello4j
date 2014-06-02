@@ -54,7 +54,7 @@ public interface CardService {
 
 	void overwriteCardCheckItemName(String cardId, String itemName, String checkListId, String checkItemId);
 
-	void createNewCheckItem(String itemName, String itemState, String checkListId);
+	void createNewCheckItem(String itemName, boolean itemState, String checkListId);
 
 	void overwriteCardCheckItemState(String cardId, String itemState, String checkListId, String checkItemId);
 
