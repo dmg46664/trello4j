@@ -1,5 +1,8 @@
 package org.trello4j;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import org.trello4j.model.*;
 import org.trello4j.model.Board.Prefs;
@@ -7,10 +10,7 @@ import org.trello4j.model.Card.Attachment;
 import org.trello4j.model.Checklist.CheckItem;
 
 import javax.net.ssl.HttpsURLConnection;
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -538,7 +538,7 @@ public class TrelloImpl implements Trello {
 	}
 
 	@Override
-	public void createNewCheckList(String cardId, String checkListTitle)
+	public Checklist createNewCheckList(String cardId, String checkListTitle)
 	{
 		final String url = TrelloURL
 				.create(apiKey, TrelloURL.CHECKLIST_URL, "")
@@ -548,7 +548,21 @@ public class TrelloImpl implements Trello {
 		Map<String, String> keyValueMap = new HashMap<String, String>();
 		keyValueMap.put("name", checkListTitle);
 		keyValueMap.put("idCard", cardId);
-		doPost(url, keyValueMap);
+
+		try {
+			//convert POST response to Checklist object
+			InputStream resultInputStream = doPost(url, keyValueMap);
+			InputStreamReader isr = new InputStreamReader(resultInputStream);
+			BufferedReader br = new BufferedReader(isr);
+			Gson gson = new Gson();
+			Checklist cl = gson.fromJson(br, Checklist.class);
+			return cl;
+		} catch (JsonSyntaxException e) {
+			e.printStackTrace();
+		} catch (JsonIOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override

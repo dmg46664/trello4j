@@ -78,6 +78,10 @@ public class Card extends TrelloObject {
 		return checklists;
 	}
 
+	public void setCheckLists(List<Checklist> checklists){
+		this.checklists = checklists;
+	}
+
 	public void setIdMembers(List<String> idMembers) {
 		this.idMembers = idMembers;
 	}
