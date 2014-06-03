@@ -1100,7 +1100,9 @@ public class TrelloImpl implements Trello {
 				.create(apiKey, TrelloURL.MEMBER_CARDS_URL, usernameOrId)
 				.token(token)
 				.filter(filter)
-				.build()+"&checklists=all";
+				.build()+"&checklists=all&limit=500";
+
+		//limit due to the fact that it doesn't change
 		
 
 
