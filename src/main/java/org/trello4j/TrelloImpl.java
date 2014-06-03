@@ -580,6 +580,16 @@ public class TrelloImpl implements Trello {
 	}
 
 	@Override
+	public void deleteCheckItemFromCheckList(String checkItemId, String checkListId)
+	{
+		String url = "https://api.trello.com/1/checklists/" + checkListId +
+				"/checkItems/" + checkItemId +
+				"?key=" + apiKey +
+				"&token=" + token;
+		doRequest(url, "DELETE");
+	}
+
+	@Override
 	public void createNewCheckItem(String itemName, boolean itemState, String checkListId)
 	{
 		final String url = TrelloURL

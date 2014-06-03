@@ -61,4 +61,6 @@ public interface CardService {
 	Checklist createNewCheckList(String cardId, String checkListTitle);
 
 	void changeListOfCard(String cardId, String listId);
+
+	void deleteCheckItemFromCheckList(String checkItemId, String checkListId);
 }
