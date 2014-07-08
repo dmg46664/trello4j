@@ -21,6 +21,7 @@ public class Card extends TrelloObject {
 	private String url;
 	private double pos;
 	private List<Checklist> checklists;
+	private int checkItems ;
 
     public String getName() {
 		return name;
@@ -77,6 +78,8 @@ public class Card extends TrelloObject {
 	public List<Checklist> getCheckLists(){
 		return checklists;
 	}
+
+	public int getCheckItems() { return checkItems;}
 
 	public void setCheckLists(List<Checklist> checklists){
 		this.checklists = checklists;
